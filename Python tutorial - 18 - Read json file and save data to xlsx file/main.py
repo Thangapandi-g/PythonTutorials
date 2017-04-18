@@ -1,0 +1,52 @@
+import sys
+import pprint
+import xlsxwriter
+import json
+
+class FileManagement:
+    def __init__(self):
+        self.json_file_name = "input.json"
+        self.excel_file_name = "output.xlsx"
+        self.reset_data()
+
+    def reset_data(self):
+        self.array_x = []
+        self.array_y = []
+        self.array_sum = []
+
+    def read_text_file(self):
+        try:
+            with open(self.json_file_name) as data_file:
+                data = json.load(data_file)
+                pprint.pprint(data)
+                for each_axis in data["data"]:
+                    x = int(each_axis["x"])
+                    y = int(each_axis["y"])
+                    self.array_x.append(x)
+                    self.array_y.append(y)
+                    self.array_sum.append(x + y)
+                    pprint.pprint("x = {0}".format(x))
+                    pprint.pprint("y = {0}".format(y))
+
+        except:
+            print("Unexpected error : ", sys.exc_info()[0])
+            raise
+
+    def save_to_xlsx(self):
+        workbook = xlsxwriter.Workbook('demo.xlsx')
+        worksheet = workbook.add_worksheet()
+        worksheet.set_column('A:A', 20)
+        for index, value in enumerate(self.array_x):
+            worksheet.write(index, 0, self.array_x[index])
+            worksheet.write(index, 1, self.array_y[index])
+            worksheet.write(index, 2, self.array_sum[index])
+
+        workbook.close()
+
+if __name__ == '__main__':
+    file_management = FileManagement()
+    file_management.read_text_file()
+    file_management.save_to_xlsx()
+
+
+
