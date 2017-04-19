@@ -7,9 +7,6 @@ class FileManagement:
     def __init__(self):
         self.json_file_name = "input.json"
         self.excel_file_name = "output.xlsx"
-        self.reset_data()
-
-    def reset_data(self):
         self.array_x = []
         self.array_y = []
         self.array_sum = []
@@ -27,26 +24,20 @@ class FileManagement:
                     self.array_sum.append(x + y)
                     pprint.pprint("x = {0}".format(x))
                     pprint.pprint("y = {0}".format(y))
-
         except:
             print("Unexpected error : ", sys.exc_info()[0])
             raise
 
     def save_to_xlsx(self):
-        workbook = xlsxwriter.Workbook('demo.xlsx')
+        workbook = xlsxwriter.Workbook(self.excel_file_name)
         worksheet = workbook.add_worksheet()
-        worksheet.set_column('A:A', 20)
         for index, value in enumerate(self.array_x):
-            worksheet.write(index, 0, self.array_x[index])
-            worksheet.write(index, 1, self.array_y[index])
+            worksheet.write(index, 0, self.array_x[index]) #column 0
+            worksheet.write(index, 1, self.array_y[index]) #column 1
             worksheet.write(index, 2, self.array_sum[index])
-
         workbook.close()
 
 if __name__ == '__main__':
     file_management = FileManagement()
     file_management.read_text_file()
     file_management.save_to_xlsx()
-
-
-
